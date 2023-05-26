@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect} from "react"
 
 interface User {
   id: number,
@@ -18,6 +18,15 @@ const Hooks = () => {
       setUsers([...users, newUser])
       setUser("")
     }
+
+    useEffect(() => {
+      console.log('mounting')
+      console.log("Users: ", users)
+      return (): void => {
+        console.log('unmounting')
+      }
+    }, [users])
+    
   return (
 
     <div>
