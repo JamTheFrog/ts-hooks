@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react"
+import { useState, useEffect, useCallback} from "react"
 
 interface User {
   id: number,
@@ -8,8 +8,9 @@ interface User {
 const Hooks = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [user, setUser] = useState<string>("")
-
-    const formSubmitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+// useCallback is pretty much useless here as the function is rebuilt evertime regardless, so whenever
+// an event is dependent on state, do not use useCallback
+    const formSubmitHandler = useCallback((e: React.FormEvent<HTMLFormElement>): void => {
       e.preventDefault();
       const newUser: User = {
         id: Math.random(),
@@ -17,7 +18,7 @@ const Hooks = () => {
       }
       setUsers([...users, newUser])
       setUser("")
-    }
+    }, [users])
 
     useEffect(() => {
       console.log('mounting')
