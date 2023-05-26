@@ -10,15 +10,11 @@ const Hooks = () => {
     const [user, setUser] = useState<string>("")
 // useCallback is pretty much useless here as the function is rebuilt evertime regardless, so whenever
 // an event is dependent on state, do not use useCallback
-    const formSubmitHandler = useCallback((e: React.FormEvent<HTMLFormElement>): void => {
+    const formSubmitHandler = useCallback( (e: React.FormEvent<HTMLFormElement>): void => {
       e.preventDefault();
-      const newUser: User = {
-        id: Math.random(),
-        username: user
-      }
-      setUsers([...users, newUser])
+      setUsers([...users, { id: Math.random(), username: user }])
       setUser("")
-    }, [users])
+    }, [user, users])
 
     useEffect(() => {
       console.log('mounting')
@@ -35,7 +31,7 @@ const Hooks = () => {
         <input type="text" placeholder="Please enter user" value={user} onChange={(e) => setUser(e.target.value)}/>
         <button>Submit</button>
       </form>
-      {users?.map((user: User) => {return <h1>{user.username}</h1>})}
+      {users?.map((user: User) => {return <h1 key={user.id}>{user.username}</h1>})}
     </div>
   )
 }
