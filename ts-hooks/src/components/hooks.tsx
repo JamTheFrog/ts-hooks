@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback} from "react"
+import { useState, useEffect, useCallback, useRef} from "react"
 import MemoizedFibonacci from "./Fib"
 
 interface User {
@@ -11,6 +11,7 @@ const Hooks = () => {
     const [user, setUser] = useState<string>("")
     const [num, setNum] = useState<number>(0);
     const [fib, setFib] = useState<number | null>(null)
+    const inputRef = useRef<HTMLInputElement>(null)
 // useCallback is pretty much useless here as the function is rebuilt evertime regardless, so whenever
 // an event is dependent on state, do not use useCallback
     const formUserSubmitHandler = useCallback( (e: React.FormEvent<HTMLFormElement>): void => {
@@ -27,6 +28,8 @@ const Hooks = () => {
     useEffect(() => {
       console.log('mounting')
       console.log("Users: ", users)
+      console.log(inputRef?.current?.value);
+      
       return (): void => {
         console.log('unmounting')
       }
@@ -43,7 +46,7 @@ const Hooks = () => {
         {users?.map((user: User) => {return <h1 key={user.id}>{user.username}</h1>})}
       </div>
       <form onSubmit={formNumberSubmitHandler}>
-        <input type="number" value={num} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNum(Number(e.target.value))}/>
+        <input type="number" ref={inputRef} value={num} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNum(Number(e.target.value))}/>
         <button>Submit</button>
       </form>
       <div>
